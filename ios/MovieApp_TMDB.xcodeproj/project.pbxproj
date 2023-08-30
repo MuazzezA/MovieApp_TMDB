@@ -12,8 +12,16 @@
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+		274C2EBF2A5942529614723D /* Inter-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DC879DD86F224C05A6C71669 /* Inter-Light.ttf */; };
+		5CBA3CB7F7014AFB8F1E999E /* Inter-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4CB596BE380545C2AC8C5D26 /* Inter-Medium.ttf */; };
+		758F1DCAC20443B9BCE00FEB /* Inter-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 28A9EF7855574623BB83C826 /* Inter-Bold.ttf */; };
 		7699B88040F8A987B510C191 /* libPods-MovieApp_TMDB-MovieApp_TMDBTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-MovieApp_TMDB-MovieApp_TMDBTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		90EAAB8FC43647E59A3FEF21 /* Inter-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 727B3AC9D8604BE096DACDCB /* Inter-Black.ttf */; };
+		9843BABB9D4240F1A9FF8865 /* Inter-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2FA582993B52448ABA5A6DF1 /* Inter-Regular.ttf */; };
+		C1175E3329FE4E3E8B0E170F /* Inter-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 55AB3DF1C6E74940998B7F1C /* Inter-Thin.ttf */; };
+		C9F63A4FE1524BD3A67CA738 /* Inter-ExtraLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1B0E2AD669834146A250FF56 /* Inter-ExtraLight.ttf */; };
+		F3F3338A064A4968B1851653 /* Inter-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E8414B1D27694559BD3EA037 /* Inter-SemiBold.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -37,12 +45,20 @@
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = MovieApp_TMDB/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = MovieApp_TMDB/main.m; sourceTree = "<group>"; };
 		19F6CBCC0A4E27FBF8BF4A61 /* libPods-MovieApp_TMDB-MovieApp_TMDBTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MovieApp_TMDB-MovieApp_TMDBTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		1B0E2AD669834146A250FF56 /* Inter-ExtraLight.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-ExtraLight.ttf"; path = "../src/assets/fonts/Inter-ExtraLight.ttf"; sourceTree = "<group>"; };
+		28A9EF7855574623BB83C826 /* Inter-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-Bold.ttf"; path = "../src/assets/fonts/Inter-Bold.ttf"; sourceTree = "<group>"; };
+		2FA582993B52448ABA5A6DF1 /* Inter-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-Regular.ttf"; path = "../src/assets/fonts/Inter-Regular.ttf"; sourceTree = "<group>"; };
 		3B4392A12AC88292D35C810B /* Pods-MovieApp_TMDB.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MovieApp_TMDB.debug.xcconfig"; path = "Target Support Files/Pods-MovieApp_TMDB/Pods-MovieApp_TMDB.debug.xcconfig"; sourceTree = "<group>"; };
+		4CB596BE380545C2AC8C5D26 /* Inter-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-Medium.ttf"; path = "../src/assets/fonts/Inter-Medium.ttf"; sourceTree = "<group>"; };
+		55AB3DF1C6E74940998B7F1C /* Inter-Thin.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-Thin.ttf"; path = "../src/assets/fonts/Inter-Thin.ttf"; sourceTree = "<group>"; };
 		5709B34CF0A7D63546082F79 /* Pods-MovieApp_TMDB.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MovieApp_TMDB.release.xcconfig"; path = "Target Support Files/Pods-MovieApp_TMDB/Pods-MovieApp_TMDB.release.xcconfig"; sourceTree = "<group>"; };
 		5B7EB9410499542E8C5724F5 /* Pods-MovieApp_TMDB-MovieApp_TMDBTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MovieApp_TMDB-MovieApp_TMDBTests.debug.xcconfig"; path = "Target Support Files/Pods-MovieApp_TMDB-MovieApp_TMDBTests/Pods-MovieApp_TMDB-MovieApp_TMDBTests.debug.xcconfig"; sourceTree = "<group>"; };
 		5DCACB8F33CDC322A6C60F78 /* libPods-MovieApp_TMDB.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MovieApp_TMDB.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		727B3AC9D8604BE096DACDCB /* Inter-Black.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-Black.ttf"; path = "../src/assets/fonts/Inter-Black.ttf"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = MovieApp_TMDB/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-MovieApp_TMDB-MovieApp_TMDBTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MovieApp_TMDB-MovieApp_TMDBTests.release.xcconfig"; path = "Target Support Files/Pods-MovieApp_TMDB-MovieApp_TMDBTests/Pods-MovieApp_TMDB-MovieApp_TMDBTests.release.xcconfig"; sourceTree = "<group>"; };
+		DC879DD86F224C05A6C71669 /* Inter-Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-Light.ttf"; path = "../src/assets/fonts/Inter-Light.ttf"; sourceTree = "<group>"; };
+		E8414B1D27694559BD3EA037 /* Inter-SemiBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-SemiBold.ttf"; path = "../src/assets/fonts/Inter-SemiBold.ttf"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -122,6 +138,7 @@
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				BBD78D7AC51CEA395F1C20DB /* Pods */,
+				C4C5CCC48FA7409C8F1797C3 /* Resources */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -146,6 +163,22 @@
 				89C6BE57DB24E9ADA2F236DE /* Pods-MovieApp_TMDB-MovieApp_TMDBTests.release.xcconfig */,
 			);
 			path = Pods;
+			sourceTree = "<group>";
+		};
+		C4C5CCC48FA7409C8F1797C3 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				727B3AC9D8604BE096DACDCB /* Inter-Black.ttf */,
+				28A9EF7855574623BB83C826 /* Inter-Bold.ttf */,
+				1B0E2AD669834146A250FF56 /* Inter-ExtraLight.ttf */,
+				DC879DD86F224C05A6C71669 /* Inter-Light.ttf */,
+				4CB596BE380545C2AC8C5D26 /* Inter-Medium.ttf */,
+				2FA582993B52448ABA5A6DF1 /* Inter-Regular.ttf */,
+				E8414B1D27694559BD3EA037 /* Inter-SemiBold.ttf */,
+				55AB3DF1C6E74940998B7F1C /* Inter-Thin.ttf */,
+			);
+			name = Resources;
+			path = "";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -244,6 +277,14 @@
 			files = (
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+				90EAAB8FC43647E59A3FEF21 /* Inter-Black.ttf in Resources */,
+				758F1DCAC20443B9BCE00FEB /* Inter-Bold.ttf in Resources */,
+				C9F63A4FE1524BD3A67CA738 /* Inter-ExtraLight.ttf in Resources */,
+				274C2EBF2A5942529614723D /* Inter-Light.ttf in Resources */,
+				5CBA3CB7F7014AFB8F1E999E /* Inter-Medium.ttf in Resources */,
+				9843BABB9D4240F1A9FF8865 /* Inter-Regular.ttf in Resources */,
+				F3F3338A064A4968B1851653 /* Inter-SemiBold.ttf in Resources */,
+				C1175E3329FE4E3E8B0E170F /* Inter-Thin.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

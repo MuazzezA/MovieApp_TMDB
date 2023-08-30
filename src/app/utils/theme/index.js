@@ -16,9 +16,11 @@ const sizes = {
   h8: 12,
   base: 16,
   radius: 12,
-  padding: 24,
+  padding: 20,
   width,
   height,
+  componentHeight: 38,
+  inputHeight: 44,
 };
 
 export {colors, sizes};

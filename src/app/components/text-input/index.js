@@ -2,6 +2,7 @@ import React from 'react';
 import {View, TextInput as RNInput} from 'react-native';
 import {Icon} from '../icon';
 import styles from './styles';
+import {colors} from '../../utils/theme';
 
 export const TextInput = ({value, onChangeText, ...rest}) => {
   return (
@@ -12,6 +13,7 @@ export const TextInput = ({value, onChangeText, ...rest}) => {
         onChangeText={onChangeText}
         style={styles.input}
         placeholder="Search"
+        placeholderTextColor={colors.darkGray}
         {...rest}
       />
     </View>

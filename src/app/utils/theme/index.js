@@ -5,6 +5,7 @@ const colors = {
   black: '#000000',
   white: '#ffffff',
   gray: '#EFEFF0',
+  darkGray: '#6A6A6A',
   success: '#4caf50',
   error: '#f44336',
   warning: '#ffeb3b',

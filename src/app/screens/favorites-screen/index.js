@@ -2,7 +2,14 @@ import React, {useEffect, useState} from 'react';
 import {ActivityIndicator, FlatList, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {useSelector, useDispatch} from 'react-redux';
-import {Text, Button, MovieCard, TextInput, Header} from '../../components';
+import {
+  Text,
+  Button,
+  MovieCard,
+  TextInput,
+  Header,
+  DropDown,
+} from '../../components';
 import {getFavoriteMovies} from '../../api';
 import styles from './styles';
 
@@ -10,10 +17,14 @@ export const FavoritesScreen = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const [searchText, setSearchText] = useState('');
-  const [filteredMovie, setFilteredMovie] = React.useState();
+  const [filteredMovie, setFilteredMovie] = useState();
+  const [selectedCategory, setSelectedCategory] = useState([]);
+  const [ratingShortType, setRatingShortType] = useState(0);
+
   const {favoriteMovies, loading, error} = useSelector(
     state => state.favoriteMovies,
   );
+  const {data: genres} = useSelector(state => state.genres);
 
   useEffect(() => {
     dispatch(getFavoriteMovies());
@@ -23,6 +34,28 @@ export const FavoritesScreen = () => {
     setFilteredMovie(favoriteMovies.results);
   }, [favoriteMovies]);
 
+  useEffect(() => {
+    if (selectedCategory.length === 0) {
+      setFilteredMovie(favoriteMovies?.results);
+      return;
+    } else {
+      const selectedCategoryIds = selectedCategory.map(category => category.id);
+      const filteredData = favoriteMovies?.results.filter(item => {
+        return item.genre_ids.some(genreId =>
+          selectedCategoryIds.includes(genreId),
+        );
+      });
+      setFilteredMovie(filteredData);
+    }
+  }, [selectedCategory]);
+
+  const onChangeSearchText = text => {
+    setSearchText(text);
+    const data = favoriteMovies.results.filter(item => {
+      return item.title.toLowerCase().includes(text.toLowerCase());
+    });
+    setFilteredMovie(data);
+  };
   if (loading) {
     return (
       <View style={styles.infoContainer}>
@@ -30,6 +63,21 @@ export const FavoritesScreen = () => {
       </View>
     );
   }
+
+  const sortByRating = () => {
+    console.log('shortByRating : ', filteredMovie);
+    const filteredDataCopy = [...filteredMovie];
+    const data = filteredDataCopy.sort((a, b) => {
+      if (ratingShortType === 1) {
+        setRatingShortType(0);
+        return a.vote_average - b.vote_average;
+      } else if (ratingShortType === 0) {
+        setRatingShortType(1);
+        return b.vote_average - a.vote_average;
+      }
+    });
+    setFilteredMovie(data);
+  };
 
   if (error) {
     return (
@@ -69,32 +117,23 @@ export const FavoritesScreen = () => {
       <Text style={styles.titleText}>Favorite Movies</Text>
       <TextInput
         value={searchText}
-        onChangeText={text => {
-          setSearchText(text);
-          console.log('text : ', text);
-          const data = favoriteMovies.results.filter(item => {
-            return item.title.toLowerCase().includes(text.toLowerCase());
-          });
-          setFilteredMovie(data);
-        }}
+        onChangeText={onChangeSearchText}
         onBlur={() => {
           console.log('onBlur');
         }}
       />
       <View style={styles.shortButtonsContainer}>
-        <Button
-          icon={'Menu'}
+        <DropDown
+          data={genres?.genres}
+          icon="Menu"
           title="Short By Category"
-          onPress={() => {
-            console.log('short by category');
-          }}
+          selectedValue={selectedCategory}
+          setSelectedValue={setSelectedCategory}
         />
         <Button
-          icon={'Stars'}
+          icon="Stars"
           title="Short By Rating"
-          onPress={() => {
-            console.log('short by rating');
-          }}
+          onPress={() => sortByRating()}
         />
       </View>
 

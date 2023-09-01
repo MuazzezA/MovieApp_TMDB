@@ -19,6 +19,7 @@ export const FavoritesScreen = () => {
   const [searchText, setSearchText] = useState('');
   const [filteredMovie, setFilteredMovie] = useState();
   const [selectedCategory, setSelectedCategory] = useState([]);
+  const [ratingShortType, setRatingShortType] = useState(0);
 
   const {favoriteMovies, loading, error} = useSelector(
     state => state.favoriteMovies,
@@ -62,6 +63,21 @@ export const FavoritesScreen = () => {
       </View>
     );
   }
+
+  const shortByRating = () => {
+    console.log('shortByRating : ', filteredMovie);
+    const filteredDataCopy = [...filteredMovie];
+    const data = filteredDataCopy.sort((a, b) => {
+      if (ratingShortType === 1) {
+        setRatingShortType(0);
+        return a.vote_average - b.vote_average;
+      } else if (ratingShortType === 0) {
+        setRatingShortType(1);
+        return b.vote_average - a.vote_average;
+      }
+    });
+    setFilteredMovie(data);
+  };
 
   if (error) {
     return (
@@ -109,17 +125,15 @@ export const FavoritesScreen = () => {
       <View style={styles.shortButtonsContainer}>
         <DropDown
           data={genres?.genres}
-          icon={'Menu'}
-          title={'Short By Category'}
+          icon="Menu"
+          title="Short By Category"
           selectedValue={selectedCategory}
           setSelectedValue={setSelectedCategory}
         />
         <Button
-          icon={'Stars'}
+          icon="Stars"
           title="Short By Rating"
-          onPress={() => {
-            console.log('short by rating');
-          }}
+          onPress={() => shortByRating()}
         />
       </View>
 

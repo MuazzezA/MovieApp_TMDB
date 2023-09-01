@@ -5,3 +5,4 @@ export * from './star-vote';
 export * from './movie-card';
 export * from './text-input';
 export * from './header';
+export * from './dropdown';

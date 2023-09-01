@@ -13,6 +13,7 @@ export const HomeScreen = () => {
 
   const [filteredMovie, setFilteredMovie] = useState([{}]);
   const [selectedCategory, setSelectedCategory] = useState([]);
+  const [ratingShortType, setRatingShortType] = useState(0);
 
   const {data, loading} = useSelector(state => state.discoverMovie);
   const {data: genres} = useSelector(state => state.genres);
@@ -48,6 +49,21 @@ export const HomeScreen = () => {
       return item.title.toLowerCase().includes(text.toLowerCase());
     });
     setFilteredMovie(filteredData);
+  };
+
+  const sortByRating = () => {
+    console.log('shortByRating : ', filteredMovie);
+    const filteredDataCopy = [...filteredMovie];
+    const sortedData = filteredDataCopy.sort((a, b) => {
+      if (ratingShortType === 1) {
+        setRatingShortType(0);
+        return a.vote_average - b.vote_average;
+      } else if (ratingShortType === 0) {
+        setRatingShortType(1);
+        return b.vote_average - a.vote_average;
+      }
+    });
+    setFilteredMovie(sortedData);
   };
 
   if (loading || !filteredMovie) {
@@ -89,13 +105,7 @@ export const HomeScreen = () => {
           selectedValue={selectedCategory}
           setSelectedValue={setSelectedCategory}
         />
-        <Button
-          icon={'Stars'}
-          title="Short By Rating"
-          onPress={() => {
-            console.log('Short By Rating');
-          }}
-        />
+        <Button icon={'Stars'} title="Short By Rating" onPress={sortByRating} />
       </View>
 
       <FlatList

@@ -64,7 +64,7 @@ export const FavoritesScreen = () => {
     );
   }
 
-  const shortByRating = () => {
+  const sortByRating = () => {
     console.log('shortByRating : ', filteredMovie);
     const filteredDataCopy = [...filteredMovie];
     const data = filteredDataCopy.sort((a, b) => {
@@ -133,7 +133,7 @@ export const FavoritesScreen = () => {
         <Button
           icon="Stars"
           title="Short By Rating"
-          onPress={() => shortByRating()}
+          onPress={() => sortByRating()}
         />
       </View>
 

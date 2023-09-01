@@ -1,53 +1,89 @@
 import React, {useEffect, useState} from 'react';
 import {View, Image, ScrollView, ActivityIndicator} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
+import {addFavoriteMovie, getMovieCredits, getMovieDetail} from '../../api';
+import {useDispatch, useSelector} from 'react-redux';
 import {Header, StarVote, Text} from '../../components';
 import styles from './styles';
+import {reset} from '../../redux/slices/movie-detail-slice';
 
 const isActor = item => {
   return item?.known_for_department === 'Acting';
 };
 
 const isDirector = item => {
-  console.log(item);
   return item?.job === 'Director';
 };
 
-// ! with id : details and credits(cast&crew)
-
 export const MovieDetailScreen = ({route}) => {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
   const {movieId} = route.params;
-  const [movie, setMovie] = useState([]);
   const [cast, setCast] = useState([]);
   const [crew, setCrew] = useState([]);
-
   const [favorite, setFavorite] = useState(false);
+  const favoriteData = useSelector(
+    state => state.favoriteMovies.favoriteMovies,
+  );
+  const movieDetail = useSelector(state => state.movieDetail.data);
+  const movieCredits = useSelector(state => state.movieCredits.data);
+  const movieFavoriteStatus = useSelector(state => state.addFavoriteMovie.data);
+  useEffect(() => {
+    dispatch(reset());
+    dispatch(getMovieDetail(movieId));
+    dispatch(getMovieCredits(movieId));
+  }, [movieId]);
+
+  useEffect(() => {
+    if (favoriteData) {
+      const isFavorite = favoriteData.results.find(
+        movieItem => movieItem.id === movieId,
+      );
+      if (isFavorite) {
+        setFavorite(true);
+      }
+    }
+  }, [favoriteData]);
+
+  useEffect(() => {
+    if (movieCredits) {
+      setCast(movieCredits.cast);
+      setCrew(movieCredits.crew);
+    }
+  }, [movieCredits]);
+
+  const pressSetFavorite = async () => {
+    dispatch(addFavoriteMovie(movieId));
+    setFavorite(!favorite);
+  };
+
   return (
     <View style={styles.root}>
       <Header
         leftIcon={'ChevronLeft'}
         favorite={favorite}
         onPressLeftIcon={() => navigation.goBack()}
-        onPressFavorite={() => setFavorite(!favorite)}
+        onPressFavorite={() => pressSetFavorite()}
       />
 
-      {movie && cast ? (
+      {movieDetail && cast && crew ? (
         <ScrollView
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.contentContainerStyle}>
           <Image
             style={styles.image}
             source={{
-              uri: `https://image.tmdb.org/t/p/w500${movie.poster_path}`,
+              uri: `https://image.tmdb.org/t/p/w500${movieDetail.poster_path}`,
             }}
           />
-          <Text style={styles.title}>{movie.title}</Text>
-          <StarVote rating={movie.vote_average} />
+          <Text style={styles.title}>{movieDetail.title}</Text>
+          <StarVote rating={movieDetail.vote_average} />
 
           <Text style={styles.subtitle}>
             Genre :{' '}
-            <Text>{movie.genres.map(genre => genre.name).join(' / ')} </Text>
+            <Text>
+              {movieDetail.genres.map(genre => genre.name).join(' / ')}{' '}
+            </Text>
           </Text>
 
           <Text style={styles.subtitle}>
@@ -70,7 +106,7 @@ export const MovieDetailScreen = ({route}) => {
             </Text>
           </Text>
           <Text style={styles.descTitleText}>Description</Text>
-          <Text style={styles.descText}>{movie.overview}</Text>
+          <Text style={styles.descText}>{movieDetail.overview}</Text>
         </ScrollView>
       ) : (
         <ActivityIndicator />

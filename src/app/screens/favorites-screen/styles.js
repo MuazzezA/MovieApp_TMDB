@@ -22,7 +22,7 @@ export default StyleSheet.create({
     justifyContent: 'space-between',
     marginTop: sizes.padding,
   },
-  notFoundDataTextContainer: {
+  infoContainer: {
     flex: 0.8,
     justifyContent: 'center',
     alignItems: 'center',
@@ -37,5 +37,11 @@ export default StyleSheet.create({
     fontFamily: 'Inter-Light',
     textAlign: 'center',
     color: colors.darkGray,
+  },
+  button: {
+    marginTop: sizes.padding,
+    borderColor: colors.darkGray,
+    borderWidth: 1,
+    borderRadius: sizes.radius,
   },
 });

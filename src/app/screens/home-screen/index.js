@@ -1,13 +1,48 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {ActivityIndicator, FlatList, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import styles from './styles';
+import {useDispatch, useSelector} from 'react-redux';
 import {Text, Button, MovieCard, TextInput} from '../../components';
+import {discoverMovies, getFavoriteMovies} from '../../api';
+import styles from './styles';
 
 export const HomeScreen = () => {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
   const [searchText, setSearchText] = useState('');
-  const [results, setResults] = useState([]);
+
+  const [filteredMovie, setFilteredMovie] = useState([{}]);
+  const {data, loading} = useSelector(state => state.discoverMovie);
+
+  useEffect(() => {
+    dispatch(discoverMovies());
+    dispatch(getFavoriteMovies());
+  }, []);
+
+  useEffect(() => {
+    setFilteredMovie(data?.results);
+  }, [data]);
+
+  const onChangeSearchText = text => {
+    setSearchText(text);
+
+    const filteredData = data?.results.filter(item => {
+      return item.title.toLowerCase().includes(text.toLowerCase());
+    });
+    setFilteredMovie(filteredData);
+  };
+  if (loading || !filteredMovie) {
+    return (
+      <ActivityIndicator
+        size="large"
+        color="red"
+        style={styles.activityIndicator}
+      />
+    );
+  }
+
+  console.log('filteredMovie', filteredMovie);
+
   return (
     <View style={styles.root}>
       <View style={styles.titleContainer}>
@@ -23,10 +58,7 @@ export const HomeScreen = () => {
 
       <TextInput
         value={searchText}
-        onChangeText={text => {
-          setSearchText(text);
-          console.log('text : ', text);
-        }}
+        onChangeText={onChangeSearchText}
         onBlur={() => {
           console.log('onBlur');
         }}
@@ -49,29 +81,25 @@ export const HomeScreen = () => {
         />
       </View>
 
-      {results ? (
-        <FlatList
-          showsVerticalScrollIndicator={false}
-          data={results}
-          ItemSeparatorComponent={() => {
-            return <View style={styles.seperator} />;
-          }}
-          renderItem={({item}) => {
-            return (
-              <MovieCard
-                data={item}
-                onPress={() => {
-                  navigation.navigate('movie-detail-screen', {
-                    movieId: item.id,
-                  });
-                }}
-              />
-            );
-          }}
-        />
-      ) : (
-        <ActivityIndicator style={styles.activityIndicator} />
-      )}
+      <FlatList
+        showsVerticalScrollIndicator={false}
+        data={filteredMovie}
+        ItemSeparatorComponent={() => {
+          return <View style={styles.seperator} />;
+        }}
+        renderItem={({item}) => {
+          return (
+            <MovieCard
+              data={item}
+              onPress={() => {
+                navigation.navigate('movie-detail-screen', {
+                  movieId: item.id,
+                });
+              }}
+            />
+          );
+        }}
+      />
     </View>
   );
 };

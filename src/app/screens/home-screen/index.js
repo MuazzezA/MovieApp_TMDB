@@ -83,7 +83,7 @@ export const HomeScreen = () => {
 
       <View style={styles.shortButtonsContainer}>
         <DropDown
-          data={genres.genres}
+          data={genres?.genres}
           icon={'Menu'}
           title={'Short By Category'}
           selectedValue={selectedCategory}

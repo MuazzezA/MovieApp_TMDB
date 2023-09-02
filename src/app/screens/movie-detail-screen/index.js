@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {View, Image, ScrollView, ActivityIndicator} from 'react-native';
+import {View, Image, ScrollView, ActivityIndicator, Alert} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {addFavoriteMovie, getMovieCredits, getMovieDetail} from '../../api';
 import {useDispatch, useSelector} from 'react-redux';
@@ -27,7 +27,6 @@ export const MovieDetailScreen = ({route}) => {
   );
   const movieDetail = useSelector(state => state.movieDetail.data);
   const movieCredits = useSelector(state => state.movieCredits.data);
-  const movieFavoriteStatus = useSelector(state => state.addFavoriteMovie.data);
   useEffect(() => {
     dispatch(reset());
     dispatch(getMovieDetail(movieId));
@@ -53,7 +52,13 @@ export const MovieDetailScreen = ({route}) => {
   }, [movieCredits]);
 
   const pressSetFavorite = async () => {
-    dispatch(addFavoriteMovie(movieId));
+    if (!favorite) {
+      Alert.alert('Movie added to favorites');
+      dispatch(addFavoriteMovie({movieId: movieId, isFavorite: true}));
+    } else {
+      Alert.alert('Movie removed from favorites');
+      dispatch(addFavoriteMovie({movieId: movieId, isFavorite: false}));
+    }
     setFavorite(!favorite);
   };
 

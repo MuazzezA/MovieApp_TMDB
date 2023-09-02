@@ -41,7 +41,7 @@ export default StyleSheet.create({
   noResultText: {
     fontSize: sizes.h7,
     textAlign: 'center',
-    marginTop: sizes.padding * 2,
+    marginTop: sizes.componentHeight * 2,
   },
   flatList: {
     paddingTop: 50,

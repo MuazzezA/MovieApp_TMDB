@@ -108,7 +108,7 @@ export const HomeScreen = () => {
     />
   );
 
-  if (loading || !filteredMovie) {
+  if ((loading || !filteredMovie) && searchText !== '') {
     return (
       <ActivityIndicator
         size="large"

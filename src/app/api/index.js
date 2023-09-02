@@ -65,3 +65,10 @@ export const getGenres = createAsyncThunk('getGenres', async () => {
   const res = await instance.get('genre/movie/list?language=en');
   return res.data;
 });
+
+export const searchMovie = createAsyncThunk('searchMovie', async query => {
+  const res = await instance.get(
+    `/search/movie?include_adult=false&page=${1}&query=${query}`,
+  );
+  return res.data;
+});

@@ -5,6 +5,7 @@ import movieDetailReducer from './slices/movie-detail-slice.js';
 import movieCreditsReducer from './slices/movie-credits-slice.js';
 import discoverMovieReducer from './slices/discover-movie-slice.js';
 import genresReducer from './slices/genres-slice.js';
+import searchMovieReducer from './slices/search-movie-slice.js';
 
 export const store = configureStore({
   reducer: {
@@ -14,5 +15,6 @@ export const store = configureStore({
     movieCredits: movieCreditsReducer,
     discoverMovie: discoverMovieReducer,
     genres: genresReducer,
+    searchMovie: searchMovieReducer,
   },
 });

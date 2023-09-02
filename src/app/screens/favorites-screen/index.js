@@ -97,19 +97,6 @@ export const FavoritesScreen = () => {
     );
   }
 
-  if (!loading && favoriteMovies?.results?.lenght === 0) {
-    return (
-      <View style={styles.infoContainer}>
-        <Text style={styles.notdataTitle}>
-          There are no movies in favorites yet.
-        </Text>
-        <Text style={styles.notdataDesc}>
-          To favorite a movie, go to my movie detail and tap the heart.
-        </Text>
-      </View>
-    );
-  }
-
   return (
     <View style={styles.root}>
       <Header
@@ -139,25 +126,36 @@ export const FavoritesScreen = () => {
         />
       </View>
 
-      <FlatList
-        showsVerticalScrollIndicator={false}
-        data={filteredMovie}
-        ItemSeparatorComponent={() => {
-          return <View style={styles.seperator} />;
-        }}
-        renderItem={({item}) => {
-          return (
-            <MovieCard
-              data={item}
-              onPress={() => {
-                navigation.navigate('movie-detail-screen', {
-                  movieId: item.id,
-                });
-              }}
-            />
-          );
-        }}
-      />
+      {filteredMovie && filteredMovie.length > 0 ? (
+        <FlatList
+          showsVerticalScrollIndicator={false}
+          data={filteredMovie}
+          ItemSeparatorComponent={() => {
+            return <View style={styles.seperator} />;
+          }}
+          renderItem={({item}) => {
+            return (
+              <MovieCard
+                data={item}
+                onPress={() => {
+                  navigation.navigate('movie-detail-screen', {
+                    movieId: item.id,
+                  });
+                }}
+              />
+            );
+          }}
+        />
+      ) : (
+        <View style={styles.infoContainer}>
+          <Text style={styles.notdataTitle}>
+            There are no movies in favorites yet.
+          </Text>
+          <Text style={styles.notdataDesc}>
+            To favorite a movie, go to my movie detail and tap the heart.
+          </Text>
+        </View>
+      )}
     </View>
   );
 };

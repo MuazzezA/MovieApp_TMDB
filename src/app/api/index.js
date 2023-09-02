@@ -24,11 +24,11 @@ export const getFavoriteMovies = createAsyncThunk(
 
 export const addFavoriteMovie = createAsyncThunk(
   'addFavoriteMovie',
-  async movieId => {
+  async ({movieId, isFavorite}) => {
     const res = await instance.post('/account/' + ACCOUNT_ID + '/favorite', {
       media_type: 'movie',
       media_id: movieId,
-      favorite: true,
+      favorite: isFavorite,
     });
     return res.data;
   },

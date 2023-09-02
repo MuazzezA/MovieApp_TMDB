@@ -32,4 +32,9 @@ export default StyleSheet.create({
     flex: 0.8,
     justifyContent: 'center',
   },
+  noResultText: {
+    fontSize: sizes.h7,
+    textAlign: 'center',
+    marginTop: sizes.padding * 2,
+  },
 });

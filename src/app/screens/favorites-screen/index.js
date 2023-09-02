@@ -1,6 +1,6 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useCallback} from 'react';
 import {ActivityIndicator, FlatList, View} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, useFocusEffect} from '@react-navigation/native';
 import {useSelector, useDispatch} from 'react-redux';
 import {
   Text,
@@ -26,9 +26,11 @@ export const FavoritesScreen = () => {
   );
   const {data: genres} = useSelector(state => state.genres);
 
-  useEffect(() => {
-    dispatch(getFavoriteMovies());
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      dispatch(getFavoriteMovies());
+    }, []),
+  );
 
   useEffect(() => {
     setFilteredMovie(favoriteMovies.results);

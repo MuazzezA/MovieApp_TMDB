@@ -66,12 +66,9 @@ export const getGenres = createAsyncThunk('getGenres', async () => {
   return res.data;
 });
 
-export const searchMovie = createAsyncThunk(
-  'searchMovie',
-  async (query, pageCount = 1) => {
-    const res = await instance.get(
-      `/search/movie?include_adult=false&page=${pageCount}&query=${query}`,
-    );
-    return res.data;
-  },
-);
+export const searchMovie = createAsyncThunk('searchMovie', async query => {
+  const res = await instance.get(
+    `/search/movie?include_adult=false&page=${1}&query=${query}`,
+  );
+  return res.data;
+});

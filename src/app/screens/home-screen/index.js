@@ -1,5 +1,11 @@
-import React, {useEffect, useState} from 'react';
-import {ActivityIndicator, FlatList, View} from 'react-native';
+import React, {useEffect, useRef, useState} from 'react';
+import {
+  ActivityIndicator,
+  Animated,
+  Easing,
+  FlatList,
+  View,
+} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
 import {Text, Button, MovieCard, TextInput, DropDown} from '../../components';
@@ -15,17 +21,16 @@ import {reset} from '../../redux/slices/search-movie-slice';
 export const HomeScreen = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const [searchText, setSearchText] = useState('');
-
-  const [filteredMovie, setFilteredMovie] = useState([{}]);
-  const [selectedCategory, setSelectedCategory] = useState([]);
-  const [ratingShortType, setRatingShortType] = useState(0);
+  const translateY = useRef(new Animated.Value(0)).current;
 
   const {data, loading} = useSelector(state => state.discoverMovie);
   const {data: genres} = useSelector(state => state.genres);
-  const {data: searchData, loading: searchLoading} = useSelector(
-    state => state.searchMovie,
-  );
+  const {data: searchData} = useSelector(state => state.searchMovie);
+
+  const [searchText, setSearchText] = useState('');
+  const [filteredMovie, setFilteredMovie] = useState([{}]);
+  const [selectedCategory, setSelectedCategory] = useState([]);
+  const [ratingShortType, setRatingShortType] = useState(0);
 
   useEffect(() => {
     dispatch(discoverMovies());
@@ -83,6 +88,26 @@ export const HomeScreen = () => {
     setFilteredMovie(sortedData);
   };
 
+  const sortContainerVisibility = visible => {
+    Animated.timing(translateY, {
+      toValue: visible ? -51 : 0,
+      duration: 300,
+      easing: Easing.linear,
+      useNativeDriver: true,
+    }).start();
+  };
+
+  const renderFlatListItem = item => (
+    <MovieCard
+      data={item}
+      onPress={() => {
+        navigation.navigate('movie-detail-screen', {
+          movieId: item.id,
+        });
+      }}
+    />
+  );
+
   if (loading || !filteredMovie) {
     return (
       <ActivityIndicator
@@ -112,7 +137,11 @@ export const HomeScreen = () => {
         onBlur={onBlurInput}
       />
 
-      <View style={styles.shortButtonsContainer}>
+      <Animated.View
+        style={[
+          styles.shortButtonsContainer,
+          {transform: [{translateY: translateY}]},
+        ]}>
         <DropDown
           data={genres?.genres}
           icon={'Menu'}
@@ -121,26 +150,24 @@ export const HomeScreen = () => {
           setSelectedValue={setSelectedCategory}
         />
         <Button icon={'Stars'} title="Short By Rating" onPress={sortByRating} />
-      </View>
+      </Animated.View>
 
       {filteredMovie && filteredMovie?.length !== 0 ? (
         <FlatList
-          showsVerticalScrollIndicator={false}
           data={filteredMovie}
+          onScroll={event => {
+            const offsetY = event.nativeEvent.contentOffset.y;
+            if (offsetY > -50 && offsetY < 200) {
+              sortContainerVisibility(false);
+            } else if (offsetY > 200) {
+              sortContainerVisibility(true);
+            }
+          }}
+          style={styles.flatList}
+          showsVerticalScrollIndicator={false}
+          renderItem={({item}) => renderFlatListItem(item)}
           ItemSeparatorComponent={() => {
             return <View style={styles.seperator} />;
-          }}
-          renderItem={({item}) => {
-            return (
-              <MovieCard
-                data={item}
-                onPress={() => {
-                  navigation.navigate('movie-detail-screen', {
-                    movieId: item.id,
-                  });
-                }}
-              />
-            );
           }}
         />
       ) : (

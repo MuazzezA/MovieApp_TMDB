@@ -48,7 +48,7 @@ export const HomeScreen = () => {
 
   useEffect(() => {
     if (selectedCategory.length === 0) {
-      setFilteredMovie(filteredMovie);
+      setFilteredMovie(data?.results);
       return;
     } else {
       const selectedCategoryIds = selectedCategory.map(category => category.id);

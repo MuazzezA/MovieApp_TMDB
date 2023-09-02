@@ -1,22 +1,36 @@
-import React, {useEffect, useState} from 'react';
-import {ActivityIndicator, FlatList, View} from 'react-native';
+import React, {useEffect, useRef, useState} from 'react';
+import {
+  ActivityIndicator,
+  Animated,
+  Easing,
+  FlatList,
+  View,
+} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
 import {Text, Button, MovieCard, TextInput, DropDown} from '../../components';
-import {discoverMovies, getFavoriteMovies, getGenres} from '../../api';
+import {
+  discoverMovies,
+  getFavoriteMovies,
+  getGenres,
+  searchMovie,
+} from '../../api';
 import styles from './styles';
+import {reset} from '../../redux/slices/search-movie-slice';
 
 export const HomeScreen = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const [searchText, setSearchText] = useState('');
-
-  const [filteredMovie, setFilteredMovie] = useState([{}]);
-  const [selectedCategory, setSelectedCategory] = useState([]);
-  const [ratingShortType, setRatingShortType] = useState(0);
+  const translateY = useRef(new Animated.Value(0)).current;
 
   const {data, loading} = useSelector(state => state.discoverMovie);
   const {data: genres} = useSelector(state => state.genres);
+  const {data: searchData} = useSelector(state => state.searchMovie);
+
+  const [searchText, setSearchText] = useState('');
+  const [filteredMovie, setFilteredMovie] = useState([{}]);
+  const [selectedCategory, setSelectedCategory] = useState([]);
+  const [ratingShortType, setRatingShortType] = useState(0);
 
   useEffect(() => {
     dispatch(discoverMovies());
@@ -29,8 +43,12 @@ export const HomeScreen = () => {
   }, [data]);
 
   useEffect(() => {
+    setFilteredMovie(searchData?.results);
+  }, [searchData]);
+
+  useEffect(() => {
     if (selectedCategory.length === 0) {
-      setFilteredMovie(data?.results);
+      setFilteredMovie(filteredMovie);
       return;
     } else {
       const selectedCategoryIds = selectedCategory.map(category => category.id);
@@ -45,14 +63,18 @@ export const HomeScreen = () => {
 
   const onChangeSearchText = text => {
     setSearchText(text);
-    const filteredData = data?.results.filter(item => {
-      return item.title.toLowerCase().includes(text.toLowerCase());
-    });
-    setFilteredMovie(filteredData);
+  };
+
+  const onBlurInput = () => {
+    dispatch(reset());
+    if (searchText !== '') {
+      dispatch(searchMovie(searchText));
+    } else {
+      setFilteredMovie(data?.results);
+    }
   };
 
   const sortByRating = () => {
-    console.log('shortByRating : ', filteredMovie);
     const filteredDataCopy = [...filteredMovie];
     const sortedData = filteredDataCopy.sort((a, b) => {
       if (ratingShortType === 1) {
@@ -66,7 +88,27 @@ export const HomeScreen = () => {
     setFilteredMovie(sortedData);
   };
 
-  if (loading || !filteredMovie) {
+  const sortContainerVisibility = visible => {
+    Animated.timing(translateY, {
+      toValue: visible ? -51 : 0,
+      duration: 300,
+      easing: Easing.linear,
+      useNativeDriver: true,
+    }).start();
+  };
+
+  const renderFlatListItem = item => (
+    <MovieCard
+      data={item}
+      onPress={() => {
+        navigation.navigate('movie-detail-screen', {
+          movieId: item.id,
+        });
+      }}
+    />
+  );
+
+  if ((loading || !filteredMovie) && searchText !== '') {
     return (
       <ActivityIndicator
         size="large"
@@ -92,12 +134,14 @@ export const HomeScreen = () => {
       <TextInput
         value={searchText}
         onChangeText={onChangeSearchText}
-        onBlur={() => {
-          console.log('onBlur');
-        }}
+        onBlur={onBlurInput}
       />
 
-      <View style={styles.shortButtonsContainer}>
+      <Animated.View
+        style={[
+          styles.shortButtonsContainer,
+          {transform: [{translateY: translateY}]},
+        ]}>
         <DropDown
           data={genres?.genres}
           icon={'Menu'}
@@ -106,27 +150,29 @@ export const HomeScreen = () => {
           setSelectedValue={setSelectedCategory}
         />
         <Button icon={'Stars'} title="Short By Rating" onPress={sortByRating} />
-      </View>
+      </Animated.View>
 
-      <FlatList
-        showsVerticalScrollIndicator={false}
-        data={filteredMovie}
-        ItemSeparatorComponent={() => {
-          return <View style={styles.seperator} />;
-        }}
-        renderItem={({item}) => {
-          return (
-            <MovieCard
-              data={item}
-              onPress={() => {
-                navigation.navigate('movie-detail-screen', {
-                  movieId: item.id,
-                });
-              }}
-            />
-          );
-        }}
-      />
+      {filteredMovie && filteredMovie?.length !== 0 ? (
+        <FlatList
+          data={filteredMovie}
+          onScroll={event => {
+            const offsetY = event.nativeEvent.contentOffset.y;
+            if (offsetY > -50 && offsetY < 200) {
+              sortContainerVisibility(false);
+            } else if (offsetY > 200) {
+              sortContainerVisibility(true);
+            }
+          }}
+          style={styles.flatList}
+          showsVerticalScrollIndicator={false}
+          renderItem={({item}) => renderFlatListItem(item)}
+          ItemSeparatorComponent={() => {
+            return <View style={styles.seperator} />;
+          }}
+        />
+      ) : (
+        <Text style={styles.noResultText}>No Result</Text>
+      )}
     </View>
   );
 };

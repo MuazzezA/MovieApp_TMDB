@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {View, Image, ScrollView, ActivityIndicator} from 'react-native';
+import {View, Image, ScrollView, ActivityIndicator, Alert} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {addFavoriteMovie, getMovieCredits, getMovieDetail} from '../../api';
 import {useDispatch, useSelector} from 'react-redux';
@@ -7,13 +7,17 @@ import {Header, StarVote, Text} from '../../components';
 import styles from './styles';
 import {reset} from '../../redux/slices/movie-detail-slice';
 
-const isActor = item => {
-  return item?.known_for_department === 'Acting';
-};
+const filterActor = cast =>
+  cast
+    .filter(item => item?.known_for_department === 'Acting')
+    .map(actor => actor.name)
+    .join(' / ');
 
-const isDirector = item => {
-  return item?.job === 'Director';
-};
+const filterDirector = crew =>
+  crew
+    .filter(item => item?.job === 'Director')
+    .map(director => director.name)
+    .join(' / ');
 
 export const MovieDetailScreen = ({route}) => {
   const navigation = useNavigation();
@@ -22,12 +26,13 @@ export const MovieDetailScreen = ({route}) => {
   const [cast, setCast] = useState([]);
   const [crew, setCrew] = useState([]);
   const [favorite, setFavorite] = useState(false);
+
+  const movieDetail = useSelector(state => state.movieDetail.data);
+  const movieCredits = useSelector(state => state.movieCredits.data);
   const favoriteData = useSelector(
     state => state.favoriteMovies.favoriteMovies,
   );
-  const movieDetail = useSelector(state => state.movieDetail.data);
-  const movieCredits = useSelector(state => state.movieCredits.data);
-  const movieFavoriteStatus = useSelector(state => state.addFavoriteMovie.data);
+
   useEffect(() => {
     dispatch(reset());
     dispatch(getMovieDetail(movieId));
@@ -53,7 +58,13 @@ export const MovieDetailScreen = ({route}) => {
   }, [movieCredits]);
 
   const pressSetFavorite = async () => {
-    dispatch(addFavoriteMovie(movieId));
+    if (!favorite) {
+      Alert.alert('Movie added to favorites');
+      dispatch(addFavoriteMovie({movieId: movieId, isFavorite: true}));
+    } else {
+      Alert.alert('Movie removed from favorites');
+      dispatch(addFavoriteMovie({movieId: movieId, isFavorite: false}));
+    }
     setFavorite(!favorite);
   };
 
@@ -82,34 +93,22 @@ export const MovieDetailScreen = ({route}) => {
           <Text style={styles.subtitle}>
             Genre :{' '}
             <Text>
-              {movieDetail.genres.map(genre => genre.name).join(' / ')}{' '}
+              {movieDetail.genres.map(genre => genre.name).join(' / ')}
             </Text>
           </Text>
 
           <Text style={styles.subtitle}>
-            Director :{' '}
-            <Text>
-              {crew
-                .filter(isDirector)
-                .map(director => director.name)
-                .join(' / ')}
-            </Text>
+            Director : <Text>{filterDirector(crew)}</Text>
           </Text>
 
           <Text style={styles.subtitle} numberOfLines={4}>
-            Actors :{' '}
-            <Text>
-              {cast
-                .filter(isActor)
-                .map(actor => actor.name)
-                .join(' / ')}
-            </Text>
+            Actors : <Text>{filterActor(cast)}</Text>
           </Text>
           <Text style={styles.descTitleText}>Description</Text>
           <Text style={styles.descText}>{movieDetail.overview}</Text>
         </ScrollView>
       ) : (
-        <ActivityIndicator />
+        <ActivityIndicator size="large" color="red" />
       )}
     </View>
   );

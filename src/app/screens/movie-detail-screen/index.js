@@ -7,13 +7,17 @@ import {Header, StarVote, Text} from '../../components';
 import styles from './styles';
 import {reset} from '../../redux/slices/movie-detail-slice';
 
-const isActor = item => {
-  return item?.known_for_department === 'Acting';
-};
+const filterActor = cast =>
+  cast
+    .filter(item => item?.known_for_department === 'Acting')
+    .map(actor => actor.name)
+    .join(' / ');
 
-const isDirector = item => {
-  return item?.job === 'Director';
-};
+const filterDirector = crew =>
+  crew
+    .filter(item => item?.job === 'Director')
+    .map(director => director.name)
+    .join(' / ');
 
 export const MovieDetailScreen = ({route}) => {
   const navigation = useNavigation();
@@ -22,11 +26,13 @@ export const MovieDetailScreen = ({route}) => {
   const [cast, setCast] = useState([]);
   const [crew, setCrew] = useState([]);
   const [favorite, setFavorite] = useState(false);
+
+  const movieDetail = useSelector(state => state.movieDetail.data);
+  const movieCredits = useSelector(state => state.movieCredits.data);
   const favoriteData = useSelector(
     state => state.favoriteMovies.favoriteMovies,
   );
-  const movieDetail = useSelector(state => state.movieDetail.data);
-  const movieCredits = useSelector(state => state.movieCredits.data);
+
   useEffect(() => {
     dispatch(reset());
     dispatch(getMovieDetail(movieId));
@@ -87,34 +93,22 @@ export const MovieDetailScreen = ({route}) => {
           <Text style={styles.subtitle}>
             Genre :{' '}
             <Text>
-              {movieDetail.genres.map(genre => genre.name).join(' / ')}{' '}
+              {movieDetail.genres.map(genre => genre.name).join(' / ')}
             </Text>
           </Text>
 
           <Text style={styles.subtitle}>
-            Director :{' '}
-            <Text>
-              {crew
-                .filter(isDirector)
-                .map(director => director.name)
-                .join(' / ')}
-            </Text>
+            Director : <Text>{filterDirector(crew)}</Text>
           </Text>
 
           <Text style={styles.subtitle} numberOfLines={4}>
-            Actors :{' '}
-            <Text>
-              {cast
-                .filter(isActor)
-                .map(actor => actor.name)
-                .join(' / ')}
-            </Text>
+            Actors : <Text>{filterActor(cast)}</Text>
           </Text>
           <Text style={styles.descTitleText}>Description</Text>
           <Text style={styles.descText}>{movieDetail.overview}</Text>
         </ScrollView>
       ) : (
-        <ActivityIndicator />
+        <ActivityIndicator size="large" color="red" />
       )}
     </View>
   );
